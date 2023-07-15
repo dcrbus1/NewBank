@@ -13,15 +13,17 @@ public class NewBank {
 	}
 	
 	private void addTestData() {
-		Customer bhagy = new Customer();
+
+		//Passwords added to allow code to run AP
+		Customer bhagy = new Customer("bhagyPassword");
 		bhagy.addAccount(new Account("Main", 1000.0));
 		customers.put("Bhagy", bhagy);
 		
-		Customer christina = new Customer();
+		Customer christina = new Customer("christinaPassword");
 		christina.addAccount(new Account("Savings", 1500.0));
 		customers.put("Christina", christina);
-		
-		Customer john = new Customer();
+
+		Customer john = new Customer("johnPassword");
 		john.addAccount(new Account("Checking", 250.0));
 		customers.put("John", john);
 	}
