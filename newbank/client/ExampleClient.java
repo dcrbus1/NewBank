@@ -7,6 +7,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/** This program is a client that communicates with the NewBankServer
+		* users send messages to the server via BufferedReader
+		*
+ **/
+
 public class ExampleClient extends Thread{
 	
 	private Socket server;

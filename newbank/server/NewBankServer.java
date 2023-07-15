@@ -7,6 +7,10 @@ import java.util.Scanner;
 import java.util.List;
 import java.lang.Character;
 
+/**
+ This program is a multithreaded server that listens to client connections from ExampleClient
+ */
+
 public class NewBankServer extends Thread {
 
     private ServerSocket server;
