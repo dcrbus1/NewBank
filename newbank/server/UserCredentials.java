@@ -30,8 +30,8 @@ public class UserCredentials {
             e.printStackTrace();
         }
     }
-
-    public static boolean validateCredentials(String userId, String password) {
+    
+    public static Customer validateCredentials(String userId, String password) {
         try {
             FileInputStream fis = new FileInputStream(CREDENTIALS_FILE);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -42,7 +42,7 @@ public class UserCredentials {
 
             if (!userId.equals(storedUserId)) {
                 System.out.println("Invalid user ID.");
-                return false;
+                return null;
             }
 
             SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(), ENCRYPTION_ALGORITHM);
@@ -52,17 +52,16 @@ public class UserCredentials {
 
             if (password.equals(new String(decryptedPassword))) {
                 System.out.println("Login successful.");
-                return true;
+                return Customer.loadCustomerData(userId);
             } else {
                 System.out.println("Incorrect password.");
-                return false;
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
-
 
     public static List<String> getAllUsers() {
         List<String> users = new ArrayList<>();

@@ -19,6 +19,64 @@ public class NewBankServer extends Thread {
         server = new ServerSocket(port);
     }
 
+
+    private static void handleChoiceTwo(Scanner scanner) {
+        // Login to an account
+        System.out.println("Enter the user ID: ");
+        String userId = scanner.nextLine();
+    
+        System.out.println("Enter the password: ");
+        String password = scanner.nextLine();
+    
+        // Validate the credentials and retrieve the Customer object
+        Customer customer = UserCredentials.validateCredentials(userId, password);
+        if (customer != null) {
+            // Additional actions with the customer object can be performed here
+    
+            while (true) {
+                // Display account options
+                System.out.println("------------------------------------------------------------------------------------------------------------------------");
+                System.out.println("1. Deposit");
+                System.out.println("2. Withdraw");
+                System.out.println("3. Exit");
+                System.out.println("Enter your choice: ");
+    
+                int accountChoice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline character
+                        customer.printCustomerData();
+
+                if (accountChoice == 1) {
+                    // Deposit
+                    System.out.println("Enter the amount to deposit: ");
+                    double amount = scanner.nextDouble();
+                    customer.deposit(amount);
+                    scanner.nextLine(); // Consume newline character
+                    customer.storeCustomerData(userId);    
+                    customer.printCustomerData();
+
+                     
+                } else if (accountChoice == 2) {
+                    // Withdraw
+                    System.out.println("Enter the amount to withdraw: ");
+                    double amount = scanner.nextDouble();
+                    customer.withdraw(amount);
+              
+                    scanner.nextLine(); // Consume newline character
+                    customer.storeCustomerData(userId);
+                    customer.printCustomerData();
+
+                } else if (accountChoice == 3) {
+                    // Exit
+                    break;
+                    
+                } else {
+                    System.out.println("Invalid choice.");
+                }
+            }
+        }
+    }
+    
+
     public void run() {
         try {
             while (true) {
@@ -127,15 +185,7 @@ public class NewBankServer extends Thread {
                     System.out.println("Password accepted");
 
                 } else if (choice == 2) {
-                    // Login to an account
-                    System.out.println("Enter the user ID: ");
-                    String userId = scanner.nextLine();
-
-                    System.out.println("Enter the password: ");
-                    String password = scanner.nextLine();
-
-                    // Validate the credentials
-                    UserCredentials.validateCredentials(userId, password);
+                    handleChoiceTwo(scanner);
 
                 } else if (choice == 3) {
                     // List all users
