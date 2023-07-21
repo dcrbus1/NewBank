@@ -21,7 +21,15 @@ public class Customer  {
 		this.userId = userId;
 		this.legalName = userId;
 	}
-	
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
 	public Customer(String userId) {
 		accounts = new ArrayList<>();
 		this.userId = userId;
