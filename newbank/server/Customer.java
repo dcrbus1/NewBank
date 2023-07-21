@@ -70,7 +70,7 @@ public class Customer  {
 		accounts.add(account);		
 	}
 	
-
+// storing customer data in the customerData directory
 	public void storeCustomerData(String userId) {
     try {
         File directory = new File("customerData");
@@ -100,7 +100,8 @@ public void printCustomerData() {
 }
 
 
-	
+	// loading customer data  saved in the customerData directory
+
 public static Customer loadCustomerData(String userId) {
     try {
         String fileName = "customerData/" + userId + ".txt";
