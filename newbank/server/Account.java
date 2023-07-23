@@ -1,27 +1,38 @@
 package newbank.server;
 
-public class Account {
+public abstract class Account {
 	
 	private String accountName;
-	private double openingBalance;
+	private double balance;
+	private String accountType;
 
-	public Account(String accountName, double openingBalance) {
+	public Account(String accountName, String accountType, double balance) {
 		this.accountName = accountName;
-		this.openingBalance = openingBalance;
+		this.balance = balance;
+		this.accountType = accountType;
 	}
 	
 	public void deposit( double amount){
-		this.openingBalance += amount;
+		this.balance += amount;
 	}
 	public void withdraw(double amount){
-		this.openingBalance -= amount;
+		if (amount <= this.balance) {
+			this.balance -= amount;
+		} else {
+			System.out.println("Insufficient funds.");
+		}
 	}
 	public void move(double amount, Account a){
 		this.withdraw(amount);
 		a.deposit(amount);
 	}
+
+	public double getBalance(){
+		return balance;
+	}
+
 	public String toString() {
-		return (accountName + ": " + openingBalance);
+		return (accountType + "Account: " + accountName + " - Balance " + balance);
 	}
 
 }

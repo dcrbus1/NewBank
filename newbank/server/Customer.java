@@ -20,6 +20,15 @@ public class Customer  {
 		this.balance = balance;
 		this.userId = userId;
 		this.legalName = userId;
+
+		// Create and add a savings account
+		SavingsAccount savingsAccount = new SavingsAccount("Savings Account", 0.0);
+		accounts.add(savingsAccount);
+
+		// Create and add a checking account
+		CheckingAccount checkingAccount = new CheckingAccount("Checking Account", 0.0);
+		accounts.add(checkingAccount);
+
 	}
 
 	public double getBalance() {
@@ -66,12 +75,27 @@ public class Customer  {
 	public void changePassword(String pass){
 		this.password = pass;
 	}
+
+	// Adds savings or checking account
 	public void addAccount(Account account) {
-		accounts.add(account);		
+		//accounts.add(account);	
+		if (account instanceof SavingsAccount) {
+			accounts.add(account);
+		} else if (account instanceof CheckingAccount) {
+			accounts.add(account);
+		} else {
+			System.out.println("Unsupported account type.");
+			// We need to add something to handle this.
+		}	
+	}
+
+	public ArrayList<Account> getAccounts(){
+		return accounts;
 	}
 	
 // storing customer data in the customerData directory
 	public void storeCustomerData(String userId) {
+		
     try {
         File directory = new File("customerData");
         if (!directory.exists()) {

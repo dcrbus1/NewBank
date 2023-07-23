@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.List;
 import java.lang.Character;
+import java.util.ArrayList;
 
 /**
  This program is a multithreaded server that listens to client connections from ExampleClient
@@ -19,6 +20,7 @@ public class NewBankServer extends Thread {
         server = new ServerSocket(port);
     }
 
+   
 
     private static void handleChoiceTwo(Scanner scanner) {
         // Login to an account
@@ -48,23 +50,90 @@ public class NewBankServer extends Thread {
 
                 if (accountChoice == 1) {
                     // Deposit
-                    System.out.println("Enter the amount to deposit: ");
-                    double amount = scanner.nextDouble();
-                    customer.deposit(amount);
-                    scanner.nextLine(); // Consume newline character
+                    System.out.println("Select the account to make a deposit:");
+
+
+                    ArrayList<Account> accounts = customer.getAccounts();
+                    int accountIndex = 1;
+                    for (Account account : accounts) {
+                        System.out.println(accountIndex + "." + account);
+                        accountIndex ++;
+                    }
+
+                    int selectedAccount = scanner.nextInt();
+                    scanner.nextLine(); 
+
+                    // Checks if input is valid and makes deposit in specified account
+                    if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
+                        System.out.println("Enter the amount to deposit: ");
+                        double amount = scanner.nextDouble();
+                        scanner.nextLine();
+
+                        // Gets the selected acconut and performs the deposit
+                        Account selectedAcc =accounts.get(selectedAccount - 1);
+                        selectedAcc.deposit(amount);
+
+                    // Saves the updated customer data
                     customer.storeCustomerData(userId);
                     customer.printCustomerData();
+
+                    } else {
+                        System.out.println("Invalid account selection.");
+                    }
                 } else if (accountChoice == 2) {
                     // Withdraw
-                    System.out.println("Enter the amount to withdraw: ");
-                    double amount = scanner.nextDouble();
-                    customer.withdraw(amount);
-                    scanner.nextLine(); // Consume newline character
+                    System.out.println("Select an account to withdraw:");
+
+
+                    ArrayList<Account> accounts = customer.getAccounts();
+                    int accountIndex = 1;
+                    for (Account account : accounts) {
+                        System.out.println(accountIndex + "." + account);
+                        accountIndex ++;
+                    }
+                     int selectedAccount = scanner.nextInt();
+                    scanner.nextLine(); 
+
+                    // Checks if input is valid and withdraws from specified account
+                    if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
+                        System.out.println("Enter the amount to withdraw: ");
+                        double amount = scanner.nextDouble();
+                        scanner.nextLine();
+
+                        // Gets the selected acconut and performs withdraw
+                        Account selectedAcc =accounts.get(selectedAccount - 1);
+                        selectedAcc.withdraw(amount);
+
                     customer.storeCustomerData(userId);
                     customer.printCustomerData();
+                    } else {
+                        System.out.println("Invalid account selection.");
+                    }
                 } else if (accountChoice == 3) {
-                    // View Balance
-                    System.out.println("Your Balance is : " + customer.getBalance());
+                    System.out.println("Select an account to view balance:");
+
+                    ArrayList<Account> accounts = customer.getAccounts();
+                    int accountIndex = 1;
+                    for (Account account : accounts) {
+                        System.out.println(accountIndex + "." + account);
+                        accountIndex ++;
+                    }
+                     int selectedAccount = scanner.nextInt();
+                    scanner.nextLine(); 
+
+                    // Checks if input is valid and displays balance from specified account
+                    if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
+                        // Gets the selected acconut and performs withdraw
+                        Account selectedAcc =accounts.get(selectedAccount - 1);
+                        System.out.println("Your balance is : " + selectedAcc.getBalance());
+
+                    customer.storeCustomerData(userId);
+                    customer.printCustomerData();
+                    } else {
+                        System.out.println("Invalid account selection.");
+                    }
+
+
                 } else if (accountChoice == 4) {
                     // Exit
                     break;
