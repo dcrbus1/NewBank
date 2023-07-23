@@ -39,11 +39,11 @@ public class Customer  {
 		this.balance = balance;
 	}
 
-	public Customer(String userId) {
-		accounts = new ArrayList<>();
-		this.userId = userId;
-		this.balance = 0.0; // Set a default value for balance
-	}
+	// public Customer(String userId) {
+	// 	accounts = new ArrayList<>();
+	// 	this.userId = userId;
+	// 	this.balance = 0.0; // Set a default value for balance
+	// }
 
 	public String accountsToString() {
 		String s = "";
@@ -148,7 +148,7 @@ public static Customer loadCustomerData(String userId) {
             return new Customer(loadedUserId, loadedBalance);
         } else {
             System.out.println("Customer data not found. Creating a new customer.");
-            Customer customer = new Customer(""); // Create a new customer object
+            Customer customer = new Customer("",0); // Create a new customer object
          	 customer.legalName = userId;
 				customer.storeCustomerData(userId); // Save the new customer data
             return customer;

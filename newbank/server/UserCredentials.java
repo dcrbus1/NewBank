@@ -5,13 +5,16 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+
 
 public class UserCredentials {
     private static final String ENCRYPTION_ALGORITHM = "AES";
     private static final String SECRET_KEY = "ThisIsASecretKey";
     private static final String CREDENTIALS_DIRECTORY = "credentials/";
 
-    public static void storeCredentials(String userId, String password) {
+    public static void storeCredentials(String userId, String password,PrintWriter out, BufferedReader in) {
         try {
             File directory = new File(CREDENTIALS_DIRECTORY);
             if (!directory.exists()) {
@@ -32,13 +35,13 @@ public class UserCredentials {
             oos.close();
             fos.close();
 
-            System.out.println("User credentials stored successfully.");
+            out.println("User credentials stored successfully.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static Customer validateCredentials(String userId, String password) {
+    public static Customer validateCredentials(String userId, String password, PrintWriter out, BufferedReader in) {
         try {
             String userFileName = CREDENTIALS_DIRECTORY + userId + ".dat";
                
@@ -52,7 +55,7 @@ public class UserCredentials {
             fis.close();
     
             if (!userId.equals(storedUserId)) {
-                System.out.println("Invalid user ID.");
+                out.println("Invalid user ID.");
                 return null;
             }
     
@@ -62,14 +65,14 @@ public class UserCredentials {
             byte[] decryptedPassword = cipher.doFinal(encryptedPassword);
     
             if (password.equals(new String(decryptedPassword))) {
-                System.out.println("Login successful.");
+                out.println("Login successful.");
                 return Customer.loadCustomerData(userId);
             } else {
-                System.out.println("Incorrect password.");
+                out.println("Incorrect password.");
                 return null;
             }
         } catch (FileNotFoundException e) {
-            System.out.println("User not found.");
+            out.println("User not found.");
             return null;
         } catch (Exception e) {
             e.printStackTrace();
