@@ -22,12 +22,28 @@ public class Customer  {
 		this.legalName = userId;
 
 		// Create and add a savings account
+		
+		String fileName = "customerData/"+userId+"Savings Account"+".txt";
+		File file = new File(fileName);
+
+        if (file.exists()) {
+		SavingsAccount savingsAccount=SavingsAccount.loadCustomerAccount(userId,"Savings Account");
+		accounts.add(savingsAccount);
+		} else{
 		SavingsAccount savingsAccount = new SavingsAccount("Savings Account", 0.0);
 		accounts.add(savingsAccount);
+		}
 
-		// Create and add a checking account
+		String fileName2 = "customerData/"+userId+"Checking Account"+".txt";
+		File file2 = new File(fileName);
+
+        if (file2.exists()) {
+		CheckingAccount checkingAccount=CheckingAccount.loadCustomerAccount(userId,"Checking Account");
+		accounts.add(checkingAccount);
+		} else{
 		CheckingAccount checkingAccount = new CheckingAccount("Checking Account", 0.0);
 		accounts.add(checkingAccount);
+		}
 
 	}
 
@@ -103,11 +119,14 @@ public class Customer  {
         }
 
         String fileName = "customerData/" + userId + ".txt";
-
         FileWriter fileWriter = new FileWriter(fileName);
 		// store the values in this particular order
         fileWriter.write(userId + "\n" +  this.legalName +"\n" +  this.balance);
         fileWriter.close();
+
+		for(Account a: accounts){
+			a.storeCustomerAccount(userId);
+		}
 
         System.out.println("Customer data stored successfully.");
     } catch (Exception e) {

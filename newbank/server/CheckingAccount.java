@@ -1,5 +1,9 @@
 package newbank.server;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 public class CheckingAccount extends Account {
 
     public CheckingAccount(String accountName, double balance){
@@ -25,5 +29,43 @@ public class CheckingAccount extends Account {
     @Override
     public String toString(){
         return "Checking Account: " + getBalance();
+    
     }
+    public static CheckingAccount loadCustomerAccount(String userId, String accountName) {
+    try {
+        String fileName = "customerData/" + userId +accountName + ".txt";
+        File file = new File(fileName);
+
+        if (file.exists()) {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+// reading the values in the same order as they are stored
+            String loadedUserId = bufferedReader.readLine();
+			
+			String loadedAccountName = (bufferedReader.readLine());
+
+			String LoadedAccountType = (bufferedReader.readLine());
+
+			double loadedBalance = Double.parseDouble(bufferedReader.readLine());    
+
+
+            fileReader.close();
+
+            System.out.println("Customer data loaded successfully.");
+			
+            return new CheckingAccount(loadedAccountName, loadedBalance);
+
+        } else {
+            System.out.println("Customer data not found. Creating a new customer.");
+            CheckingAccount account = new CheckingAccount(accountName,0.0); // Create a new customer object
+            account.storeCustomerAccount(userId);
+            // Save the new customer data
+            return account;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+	
+}
 }
