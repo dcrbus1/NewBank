@@ -82,7 +82,8 @@ public class NewBankClientHandler extends Thread{
                 out.println("2. Withdraw");
                 out.println("3. View balance");
                 out.println("4. Move money between accounts"); // Added choice
-                out.println("5. Exit");
+                out.println("5. Pay another customer");
+                out.println("6. Exit");
                 out.println("Enter your choice: ");
 
                 int accountChoice = scanner.nextInt();
@@ -219,7 +220,55 @@ public class NewBankClientHandler extends Thread{
                     }
                 } else if (accountChoice == 5) {
 
-                    // Exit
+                    // Pay another customer's account
+                    out.println("Choose the account from which to pay: ");
+
+                    ArrayList<Account> accounts = customer.getAccounts();
+                    int accountIndex = 1;
+                    for (Account account : accounts) {
+                        out.println(accountIndex + "." + account.getAccountName());
+                        accountIndex++;
+                    }
+
+                    int fromAccountIndex = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (fromAccountIndex >= 1 && fromAccountIndex <= accounts.size()) {
+                        out.println("Enter the amount to pay: ");
+                        double amount = scanner.nextDouble();
+                        scanner.nextLine();
+
+                        out.println("Enter the userID of the customer who will receive the payment: ");
+                        String receivingUserId = scanner.nextLine();
+
+                        out.println("Enter the account name of the receiver customer to deposit your payment to:");
+                        String receivingAccountName = scanner.nextLine();
+
+                        Customer receivingCustomer;
+                        receivingCustomer = Customer.loadCustomerData(receivingUserId);
+                        Account toAccount = receivingCustomer.getAccountByName(receivingAccountName);
+                        if (toAccount == null) {
+                            out.println("Error: Invalid receiving account name.");
+                            continue;
+                        }
+                        Account fromAccount = accounts.get(fromAccountIndex - 1);
+                        // Add error handling for insufficient funds.
+                        if (fromAccount.getBalance() >= amount) {
+                            fromAccount.withdraw(amount);
+                            toAccount.deposit(amount);
+                            // Save both customer's data
+                            customer.storeCustomerData(userId);
+                            receivingCustomer.storeCustomerData(receivingUserId);
+                        } else {
+                            out.println("Error: Insufficient funds in your account.");
+                        }
+                    } else {
+                        out.println("Invalid account selection for payment.");
+                    }
+
+                } else if (accountChoice == 6) {
+
+                    //Exit
                     break;
 
                 } else {

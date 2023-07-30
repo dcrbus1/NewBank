@@ -190,4 +190,14 @@ public static Customer loadCustomerData(String userId) {
 			System.out.println("Insufficient funds.");
 		}
 	}
+
+	public Account getAccountByName(String accountName) {
+		for (Account account : getAccounts()) {
+			if (account.getAccountName().equalsIgnoreCase(accountName)) {
+				return account;
+			}
+		}
+		System.out.println("Account with name: \"" + accountName + "\" not found.");
+		return null;
+	}
 }

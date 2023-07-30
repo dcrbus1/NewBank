@@ -31,6 +31,12 @@ public class CheckingAccount extends Account {
         return "Checking Account: " + getBalance();
     
     }
+
+    @Override
+    public Account loadCustomerAccount(String userId, String accountName, String accountType) {
+        return null;
+    }
+
     public static CheckingAccount loadCustomerAccount(String userId, String accountName) {
     try {
         String fileName = "customerData/" + userId +accountName + ".txt";
@@ -68,4 +74,6 @@ public class CheckingAccount extends Account {
     }
 	
 }
+
+
 }

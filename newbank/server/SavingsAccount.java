@@ -31,7 +31,12 @@ public class SavingsAccount extends Account {
     public String toString(){
         return "Savings Account: " + getBalance();
     }
-    
+
+    @Override
+    public Account loadCustomerAccount(String userId, String accountName, String accountType) {
+        return null;
+    }
+
     public static SavingsAccount loadCustomerAccount(String userId, String accountName) {
     try {
         String fileName = "customerData/" + userId +accountName + ".txt";

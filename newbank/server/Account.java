@@ -61,5 +61,7 @@ public abstract class Account {
 	}
 	public abstract Account loadCustomerAccount(String userId, String accountName,String accountType);
 
-
+	public String getAccountName() {
+		return accountName;
+	}
 }

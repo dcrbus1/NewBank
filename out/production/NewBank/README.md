@@ -47,10 +47,4 @@ To run the code
 1. Run NewBankServer.java in the server folder
 2. Run ExampleClient.java in the client folder
 
-To pay another account
-
-UserID = name e.g Max
-
-Account = Checking Account or Savings Account
-
 
