@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class SavingsAccount extends Account {
 
@@ -11,8 +12,8 @@ public class SavingsAccount extends Account {
         super(accountName,"Savings", balance);
     }
 
-    public void performWithdraw(double amount){
-        withdraw(amount);
+    public void performWithdraw(double amount,PrintWriter out){
+        withdraw(amount,out);
     }
 
     public void performMove(double amount, Account destinationAccount){

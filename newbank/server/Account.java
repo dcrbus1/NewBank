@@ -2,6 +2,7 @@ package newbank.server;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public abstract class Account {
 	
@@ -15,6 +16,16 @@ public abstract class Account {
 		this.accountType = accountType;
 	}
 	
+
+	public void withdraw(double amount,PrintWriter out) {
+
+		if (amount <= this.balance) {
+			this.balance -= amount;
+		} else {
+			
+			out.println("Insufficient funds.");
+		}
+	}
 	public void deposit( double amount){
 		this.balance += amount;
 	}

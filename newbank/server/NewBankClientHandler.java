@@ -143,7 +143,7 @@ public class NewBankClientHandler extends Thread{
 
                         // Gets the selected acconut and performs withdraw
                         Account selectedAcc = accounts.get(selectedAccount - 1);
-                        selectedAcc.withdraw(amount);
+                        selectedAcc.withdraw(amount,out);
 
                         customer.storeCustomerData(userId);
                         customer.printCustomerData();
@@ -151,7 +151,7 @@ public class NewBankClientHandler extends Thread{
                         out.println("Invalid account selection.");
                     }
                 } else if (accountChoice == 3) {
-                    out.println("Select an account to view balance:");
+                    out.println("Balances:");
 
                     ArrayList<Account> accounts = customer.getAccounts();
                     int accountIndex = 1;
@@ -159,20 +159,9 @@ public class NewBankClientHandler extends Thread{
                         out.println(accountIndex + "." + account);
                         accountIndex++;
                     }
-                    int selectedAccount = scanner.nextInt();
+                                     out.println("Press any key to continue");
+
                     scanner.nextLine();
-
-                    // Checks if input is valid and displays balance from specified account
-                    if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
-                        // Gets the selected acconut and performs withdraw
-                        Account selectedAcc = accounts.get(selectedAccount - 1);
-                        out.println("Your balance is : " + selectedAcc.getBalance());
-
-                        customer.storeCustomerData(userId);
-                        customer.printCustomerData();
-                    } else {
-                        out.println("Invalid account selection.");
-                    }
 
 
                 } else if (accountChoice == 4) {

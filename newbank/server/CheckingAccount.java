@@ -3,6 +3,7 @@ package newbank.server;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.PrintWriter;
 
 public class CheckingAccount extends Account {
 
@@ -14,6 +15,9 @@ public class CheckingAccount extends Account {
         withdraw(amount);
     }
 
+     public void performWithdraw(double amount,PrintWriter out){
+        withdraw(amount,out);
+    }
     public void performMove(double amount, Account destinationAccount){
         move(amount, destinationAccount);
     }
