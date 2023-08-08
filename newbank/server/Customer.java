@@ -92,7 +92,9 @@ public class Customer  {
 	public void changePassword(String pass){
 		this.password = pass;
 	}
-
+	public String getUserId(){
+		return this.userId;
+	}
 	// Adds savings or checking account
 	public void addAccount(Account account) {
 		//accounts.add(account);	

@@ -57,11 +57,8 @@ public class NewBankClientHandler extends Thread{
             return false;
         }
 
-
-
-
-    private static void handleChoiceTwo(Scanner scanner, PrintWriter out, BufferedReader in) {
-        // Login to an account
+    private Customer userLoginAttempt(Scanner scanner){
+         // Login to an account
         out.println("Enter the user ID: ");
         String userId = scanner.nextLine();
 
@@ -69,103 +66,83 @@ public class NewBankClientHandler extends Thread{
         String password = scanner.nextLine();
 
         // Validate the credentials and retrieve the Customer object
-        Customer customer = UserCredentials.validateCredentials(userId, password, out, in);
-        if (customer != null) {
-            // Additional actions with the customer object can be performed here
+        return UserCredentials.validateCredentials(userId, password, out, in);
+    }
+    private int mainMenu(){
 
-            while (true) {
-                // Display account options
-                //New view balance choice added + getbalance AP
-                //Order changed + move money method added
-                out.println("------------------------------------------------------------------------------------------------------------------------");
-                out.println("1. Deposit");
-                out.println("2. Withdraw");
-                out.println("3. View balance");
-                out.println("4. Move money between accounts"); // Added choice
-                out.println("5. Pay another customer");
-                out.println("6. Exit");
-                out.println("Enter your choice: ");
+    }
+    private void depositAction(Customer customer, Scanner scanner){
+        // Deposit
+        out.println("Select the account to make a deposit:");
+        ArrayList<Account> accounts = customer.getAccounts();
+        int accountIndex = 1;
+        for (Account account : accounts) {
+            out.println(accountIndex + "." + account);
+            accountIndex++;
+        }
 
-                int accountChoice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline character
+        int selectedAccount = scanner.nextInt();
+        scanner.nextLine();
+        // Checks if input is valid and makes deposit in specified account
+        if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
+            out.println("Enter the amount to deposit: ");
+            double amount = scanner.nextDouble();
+            scanner.nextLine();
 
-                if (accountChoice == 1) {
-                    // Deposit
-                    out.println("Select the account to make a deposit:");
+            // Gets the selected acconut and performs the deposit
+            Account selectedAcc = accounts.get(selectedAccount - 1);
+            selectedAcc.deposit(amount);
+            // Saves the updated customer data
+            customer.storeCustomerData(customer.getUserId());
+            customer.printCustomerData();
+        } else {
+            out.println("Invalid account selection.");
+        }
+    }
 
+    private void withdrawAction(Customer customer, Scanner scanner){
+        // Withdraw
+        out.println("Select an account to withdraw:");
+        ArrayList<Account> accounts = customer.getAccounts();
+        int accountIndex = 1;
+        for (Account account : accounts) {
+            out.println(accountIndex + "." + account);
+            accountIndex++;
+        }
+        int selectedAccount = scanner.nextInt();
+        scanner.nextLine();
 
-                    ArrayList<Account> accounts = customer.getAccounts();
-                    int accountIndex = 1;
-                    for (Account account : accounts) {
-                        out.println(accountIndex + "." + account);
-                        accountIndex++;
-                    }
+        // Checks if input is valid and withdraws from specified account
+        if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
+            out.println("Enter the amount to withdraw: ");
+            double amount = scanner.nextDouble();
+            scanner.nextLine();
 
-                    int selectedAccount = scanner.nextInt();
-                    scanner.nextLine();
+            // Gets the selected acconut and performs withdraw
+            Account selectedAcc = accounts.get(selectedAccount - 1);
+            selectedAcc.withdraw(amount,out);
 
-                    // Checks if input is valid and makes deposit in specified account
-                    if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
-                        out.println("Enter the amount to deposit: ");
-                        double amount = scanner.nextDouble();
-                        scanner.nextLine();
+            customer.storeCustomerData(customer.getUserId());
+            customer.printCustomerData();
+        } else {
+            out.println("Invalid account selection.");
+        }
+    }
 
-                        // Gets the selected acconut and performs the deposit
-                        Account selectedAcc = accounts.get(selectedAccount - 1);
-                        selectedAcc.deposit(amount);
+    private void balanceAction(Customer customer, Scanner scanner){
+        out.println("Balances:");
 
-                        // Saves the updated customer data
-                        customer.storeCustomerData(userId);
-                        customer.printCustomerData();
-
-                    } else {
-                        out.println("Invalid account selection.");
-                    }
-                } else if (accountChoice == 2) {
-                    // Withdraw
-                    out.println("Select an account to withdraw:");
-
-
-                    ArrayList<Account> accounts = customer.getAccounts();
-                    int accountIndex = 1;
-                    for (Account account : accounts) {
-                        out.println(accountIndex + "." + account);
-                        accountIndex++;
-                    }
-                    int selectedAccount = scanner.nextInt();
-                    scanner.nextLine();
-
-                    // Checks if input is valid and withdraws from specified account
-                    if (selectedAccount >= 1 && selectedAccount <= accounts.size()) {
-                        out.println("Enter the amount to withdraw: ");
-                        double amount = scanner.nextDouble();
-                        scanner.nextLine();
-
-                        // Gets the selected acconut and performs withdraw
-                        Account selectedAcc = accounts.get(selectedAccount - 1);
-                        selectedAcc.withdraw(amount,out);
-
-                        customer.storeCustomerData(userId);
-                        customer.printCustomerData();
-                    } else {
-                        out.println("Invalid account selection.");
-                    }
-                } else if (accountChoice == 3) {
-                    out.println("Balances:");
-
-                    ArrayList<Account> accounts = customer.getAccounts();
-                    int accountIndex = 1;
-                    for (Account account : accounts) {
-                        out.println(accountIndex + "." + account);
-                        accountIndex++;
-                    }
-                                     out.println("Press any key to continue");
-
-                    scanner.nextLine();
-
-
-                } else if (accountChoice == 4) {
-                    out.println("Select the account to move money from:");
+        ArrayList<Account> accounts = customer.getAccounts();
+        int accountIndex = 1;
+        for (Account account : accounts) {
+            out.println(accountIndex + "." + account);
+            accountIndex++;
+        }
+        out.println("Press any key to continue");
+        scanner.nextLine();
+    }
+    private void internalMoveAction(Customer customer, Scanner scanner ){
+        out.println("Select the account to move money from:");
 
                     ArrayList<Account> accounts = customer.getAccounts();
                     int accountIndex = 1;
@@ -199,7 +176,7 @@ public class NewBankClientHandler extends Thread{
                             fromAccount.withdraw(amount);
                             toAccount.deposit(amount);
 
-                            customer.storeCustomerData(userId);
+                            customer.storeCustomerData(customer.getUserId());
                             customer.printCustomerData();
                         } else {
                             out.println("Invalid account selection for deposit.");
@@ -207,8 +184,10 @@ public class NewBankClientHandler extends Thread{
                     } else {
                         out.println("Invalid account selection for withdraw.");
                     }
-                } else if (accountChoice == 5) {
+    }
 
+    private void moveExternalAction(Customer customer, Scanner scanner){
+        
                     // Pay another customer's account
                     out.println("Choose the account from which to pay: ");
 
@@ -238,7 +217,7 @@ public class NewBankClientHandler extends Thread{
                         Account toAccount = receivingCustomer.getAccountByName(receivingAccountName);
                         if (toAccount == null) {
                             out.println("Error: Invalid receiving account name.");
-                            continue;
+                            
                         }
                         Account fromAccount = accounts.get(fromAccountIndex - 1);
                         // Add error handling for insufficient funds.
@@ -246,7 +225,7 @@ public class NewBankClientHandler extends Thread{
                             fromAccount.withdraw(amount);
                             toAccount.deposit(amount);
                             // Save both customer's data
-                            customer.storeCustomerData(userId);
+                            customer.storeCustomerData(customer.getUserId());
                             receivingCustomer.storeCustomerData(receivingUserId);
                         } else {
                             out.println("Error: Insufficient funds in your account.");
@@ -255,6 +234,38 @@ public class NewBankClientHandler extends Thread{
                         out.println("Invalid account selection for payment.");
                     }
 
+    }
+    private void handleChoiceTwo(Scanner scanner, PrintWriter out, BufferedReader in) {
+        Customer customer = userLoginAttempt(scanner);
+        if (customer != null) {
+            // Additional actions with the customer object can be performed here
+            String userId=customer.getUserId();
+            while (true) {
+                // Display account options
+                //New view balance choice added + getbalance AP
+                //Order changed + move money method added
+                out.println("------------------------------------------------------------------------------------------------------------------------");
+                out.println("1. Deposit");
+                out.println("2. Withdraw");
+                out.println("3. View balance");
+                out.println("4. Move money between accounts"); // Added choice
+                out.println("5. Pay another customer");
+                out.println("6. Exit");
+                out.println("Enter your choice: ");
+
+                int accountChoice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline character
+
+                if (accountChoice == 1) {
+                    depositAction(customer,scanner);
+                } else if (accountChoice == 2) {
+                    withdrawAction(customer,scanner);
+                } else if (accountChoice == 3) {
+                    balanceAction(customer, scanner);
+                } else if (accountChoice == 4) {
+                    internalMoveAction(customer, scanner);
+                } else if (accountChoice == 5) {
+                    moveExternalAction(customer,scanner);
                 } else if (accountChoice == 6) {
 
                     //Exit
